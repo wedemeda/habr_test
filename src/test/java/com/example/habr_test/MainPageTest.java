@@ -41,7 +41,7 @@ public class MainPageTest {
     }
 
     @Test
-    @DisplayName("При снятой галки чек-поинта, выводится сообщение об ошибке.")
+    @DisplayName("При снятой галки чек-бокса лицензионного соглашения, выводится сообщение об ошибке.")
     public void testRegPage1() {
 
 
@@ -56,17 +56,17 @@ public class MainPageTest {
     }
 
     @Test
-    @DisplayName("По-умолчанию при открытии страницы регистрации, в чек-поинте стоит галка.")
+    @DisplayName("По-умолчанию при открытии страницы регистрации, в чек-боксе лицензионного соглашения стоит галка.")
     public void testRegPage2() {
 
 
         WebElement agreeCheckBox_cl = driver.findElement(By.cssSelector(".checkbox__input"));
 
-        assertTrue(agreeCheckBox_cl.isSelected(), "Галка в чекбоксе не установлена.");
+        assertTrue(agreeCheckBox_cl.isSelected(), "Галка в чекбоксе лицензионного соглашения не установлена.");
     }
 
     @Test
-    @DisplayName("При всех заполненных полях формы регистрации, но не нажатом чек-поинте капчи, выводится сообщение об ошибке.")
+    @DisplayName("При всех заполненных полях формы регистрации, но не нажатом чек-боксе капчи, выводится сообщение об ошибке.")
     public void testRegPage3() {
 
         String data = "$12345";

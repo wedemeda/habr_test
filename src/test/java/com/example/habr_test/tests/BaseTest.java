@@ -19,7 +19,7 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
-    public static WebDriver getDriver(){
+    public static WebDriver getDriver() {
         return driver;
     }
 

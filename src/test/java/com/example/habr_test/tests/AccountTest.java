@@ -1,12 +1,15 @@
 package com.example.habr_test.tests;
 
+import com.example.habr_test.MyExtension;
 import com.example.habr_test.pages.AccountPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MyExtension.class)
 public class AccountTest extends BaseTest{
     private AccountPage accountPage;
 

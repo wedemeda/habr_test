@@ -19,8 +19,11 @@ public class MainPage {
     @FindBy(css = ".tm-header-user-menu__toggle")
     private WebElement settingsButton;
 
-    @FindBy(id = "uiRussian")
+    @FindBy(id = "uiEnglish")
     private WebElement englishCheckBox;
+
+    @FindBy(id = "uiRussian")
+    private WebElement russishCheckBox;
 
     @FindBy(css = ".tm-input-radio-labeled__fake")
     private List<WebElement> radioButtons;
@@ -43,6 +46,23 @@ public class MainPage {
     @FindBy(id = "light-colors")
     private WebElement lightThemeLink;
 
+    @FindBy(css = "[data-test-id='articleHubsList']")
+    private List<WebElement> articleList;
+
+    @FindBy(css = "[data-test-id='main-menu-item']")
+    private List<WebElement> menuChapters;
+
+    @FindBy(css = "[data-test-id='nav-filters-button']")
+    private WebElement filtersButton;
+
+    @FindBy(xpath = "//button[contains(text(),'≥50')]")
+    private WebElement filter50;
+
+    @FindBy(css = "[data-test-id='nav-filters-apply']")
+    private WebElement filterApplyButton;
+
+    @FindBy(css = "[data-test-id='votes-meter-value']")
+    private WebElement votes;
 
     public String getErrorCode() {
         authorButton.click();
@@ -52,14 +72,30 @@ public class MainPage {
         return errorCode.getText();
     }
 
-    public String getTextEnterButton() {
-        settingsButton.click();
-        LOG.info("Нажали на кнопку Настройки");
-        actions.moveToElement(englishCheckBox).click().perform();
-        LOG.info("Выбрали чекбокс Русский");
-        saveButton.click();
-        LOG.info("Нажали на кнопку Сохранить настройки");
-        return enterButton.getText();
+    public Boolean getTextEnterButton() throws InterruptedException {
+        Thread.sleep(3000);
+        String titleEnterButton = enterButton.getText();
+        if (titleEnterButton.equals("Login")) {
+            settingsButton.click();
+            LOG.info("Нажали на кнопку Settings");
+            Thread.sleep(3000);
+            actions.moveToElement(russishCheckBox).click().perform();
+            LOG.info("Выбрали чекбокс Русский");
+            Thread.sleep(3000);
+            saveButton.click();
+            LOG.info("Нажали на кнопку Save preferences");
+        } else {
+            settingsButton.click();
+            LOG.info("Нажали на кнопку Настройки");
+            Thread.sleep(3000);
+            actions.moveToElement(englishCheckBox).click().perform();
+            LOG.info("Выбрали чекбокс English");
+            Thread.sleep(3000);
+            saveButton.click();
+            LOG.info("Нажали на кнопку Сохранить настройки");
+        }
+        String newTitleEnterButton = enterButton.getText();
+        return !titleEnterButton.equals(newTitleEnterButton);
     }
 
     public Boolean isDarkThema() {
@@ -71,6 +107,38 @@ public class MainPage {
         LOG.info("Нажали на кнопку Сохранить настройки");
         String isDisabled = lightThemeLink.getDomAttribute("disabled");
         return isDisabled != null;
+    }
+
+    public Boolean isCompactMode() {
+        settingsButton.click();
+        LOG.info("Нажали на кнопку Настройки");
+        radioButtons.get(3).click();
+        LOG.info("Выбрали чекбокс вида ленты Компактный");
+        saveButton.click();
+        LOG.info("Нажали на кнопку Сохранить настройки");
+        return articleList.isEmpty();
+    }
+
+    public Boolean isVotesEqualsFilter() throws InterruptedException {
+        menuChapters.get(1).click();
+        LOG.info("Перешли в раздел Разработка");
+        Thread.sleep(3000);
+        filtersButton.click();
+        LOG.info("Раскрыли список с фильтрами");
+        filter50.click();
+        LOG.info("Выбрали порог рейтинга ≥100");
+        filterApplyButton.click();
+        LOG.info("Нажали кнопку Применить");
+        String votesValue = votes.getText();
+        return Integer.parseInt(votesValue) >= 50;
+    }
+
+    public Boolean isDisabledFilterApplyButton() throws InterruptedException {
+        Thread.sleep(3000);
+        filtersButton.click();
+        LOG.info("Раскрыли список с фильтрами");
+        Thread.sleep(3000);
+        return !filterApplyButton.isEnabled();
     }
 
     public MainPage(WebDriver driver) {

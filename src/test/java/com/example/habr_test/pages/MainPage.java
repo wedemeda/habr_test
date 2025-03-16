@@ -1,6 +1,7 @@
 package com.example.habr_test.pages;
 
 import com.example.habr_test.AllureLogger;
+import com.example.habr_test.MyWait;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -8,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import static com.example.habr_test.MyWait.myWait;
 
 // page_url = https://habr.com
 public class MainPage {
@@ -122,9 +125,11 @@ public class MainPage {
     public Boolean isVotesEqualsFilter() throws InterruptedException {
         menuChapters.get(1).click();
         LOG.info("Перешли в раздел Разработка");
-        Thread.sleep(3000);
+//        Thread.sleep(3000);
+        myWait(10).clickable(filtersButton);
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
+        myWait(10).clickable(filter50);
         filter50.click();
         LOG.info("Выбрали порог рейтинга ≥100");
         filterApplyButton.click();
@@ -134,10 +139,12 @@ public class MainPage {
     }
 
     public Boolean isDisabledFilterApplyButton() throws InterruptedException {
-        Thread.sleep(3000);
+//        Thread.sleep(3000);
+        myWait(3).clickable(filtersButton);
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
-        Thread.sleep(3000);
+//        Thread.sleep(3000);
+        myWait(3).visible(filterApplyButton);
         return !filterApplyButton.isEnabled();
     }
 

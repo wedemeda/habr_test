@@ -5,6 +5,7 @@ import com.example.habr_test.pages.MainPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -54,7 +55,7 @@ public class MainPageTest extends BaseTest {
         assertEquals(true, mainPage.isVotesEqualsFilter(), "Порог рейтинга статьи <50");
     }
 
-    @Test
+    @RepeatedTest(10)
     @DisplayName("Проверка, что не залогонившись кнопка Применить в настройках ленты не активна")
     public void disabledFilterApplyButtonCheck() throws InterruptedException {
         assertEquals(true, mainPage.isDisabledFilterApplyButton(), "Кнопка активная");

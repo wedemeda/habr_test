@@ -49,15 +49,15 @@ public class MainPageTest extends BaseTest {
         assertEquals(true, mainPage.isCompactMode(), "Вид ленты не изменился");
     }
 
-    @Test
+    @RepeatedTest(10)
     @DisplayName("Проверка, что при выборе раздела статей Разработка и установленном фильтре Порог рейтинга   >= 50 вывелась статья с рейтингом >= 100")
-    public void votesEqualsFilterCheck() throws InterruptedException {
+    public void votesEqualsFilterCheck() {
         assertEquals(true, mainPage.isVotesEqualsFilter(), "Порог рейтинга статьи <50");
     }
 
     @RepeatedTest(10)
     @DisplayName("Проверка, что не залогонившись кнопка Применить в настройках ленты не активна")
-    public void disabledFilterApplyButtonCheck() throws InterruptedException {
+    public void disabledFilterApplyButtonCheck() {
         assertEquals(true, mainPage.isDisabledFilterApplyButton(), "Кнопка активная");
     }
 

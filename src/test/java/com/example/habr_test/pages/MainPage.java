@@ -6,8 +6,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.List;
 
 import static com.example.habr_test.MyWait.myWait;
@@ -55,7 +58,7 @@ public class MainPage {
     @FindBy(css = "[data-test-id='main-menu-item']")
     private List<WebElement> menuChapters;
 
-    @FindBy(css = "[data-test-id='nav-filters-button']")
+    @FindBy(css = "button[data-test-id='nav-filters-button']")
     private WebElement filtersButton;
 
     @FindBy(xpath = "//button[contains(text(),'≥50')]")
@@ -122,14 +125,21 @@ public class MainPage {
         return articleList.isEmpty();
     }
 
-    public Boolean isVotesEqualsFilter() throws InterruptedException {
+    // Метод для проверки, что раздел "Разработка" стал активным
+    public void waitForDevelopmentSection() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.attributeContains(
+                By.xpath("//a[contains(text(), 'Разработка') or contains(text(), 'Development')]"),
+                "class", "tm-main-menu__item_active"
+        ));
+    }
+
+    public Boolean isVotesEqualsFilter() {
         menuChapters.get(1).click();
         LOG.info("Перешли в раздел Разработка");
-//        Thread.sleep(3000);
-        myWait(10).clickable(filtersButton);
+        waitForDevelopmentSection();
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
-        myWait(10).clickable(filter50);
         filter50.click();
         LOG.info("Выбрали порог рейтинга ≥100");
         filterApplyButton.click();
@@ -138,12 +148,10 @@ public class MainPage {
         return Integer.parseInt(votesValue) >= 50;
     }
 
-    public Boolean isDisabledFilterApplyButton() throws InterruptedException {
-//        Thread.sleep(3000);
+    public Boolean isDisabledFilterApplyButton() {
         myWait(3).clickable(filtersButton);
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
-//        Thread.sleep(3000);
         myWait(3).visible(filterApplyButton);
         return !filterApplyButton.isEnabled();
     }

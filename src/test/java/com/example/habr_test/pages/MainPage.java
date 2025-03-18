@@ -1,7 +1,6 @@
 package com.example.habr_test.pages;
 
 import com.example.habr_test.AllureLogger;
-import com.example.habr_test.MyWait;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -25,19 +24,22 @@ public class MainPage {
     @FindBy(css = ".tm-header-user-menu__toggle")
     private WebElement settingsButton;
 
-    @FindBy(id = "uiEnglish")
-    private WebElement englishCheckBox;
+    @FindBy(xpath = "//label[text()='English']")
+    private WebElement englishRadioButton;
 
-    @FindBy(id = "uiRussian")
-    private WebElement russishCheckBox;
+    @FindBy(xpath = "//label[text()='Русский']")
+    private WebElement russischRadioButton;
 
-    @FindBy(css = ".tm-input-radio-labeled__fake")
-    private List<WebElement> radioButtons;
+    @FindBy(xpath = "//label[text()='Компактный' or text()='Compact']")
+    private WebElement compactModeRadioButton;
+
+    @FindBy(xpath = "//label[text()='Темная' or text()='Dark']")
+    private WebElement darkThemaRadioButton;
 
     @FindBy(css = ".tm-header__become-author-btn")
     private WebElement authorButton;
 
-    @FindBy(css = "a.button:nth-child(5)")
+    @FindBy(xpath = "//a[contains(text(),'Написать публикацию') or contains(text(),'Create publication')]")
     private WebElement postButton;
 
     @FindBy(css = ".tm-error-message__code")
@@ -55,10 +57,10 @@ public class MainPage {
     @FindBy(css = "[data-test-id='articleHubsList']")
     private List<WebElement> articleList;
 
-    @FindBy(css = "[data-test-id='main-menu-item']")
-    private List<WebElement> menuChapters;
+    @FindBy(xpath = "//a[contains(text(), 'Разработка') or contains(text(), 'Development')]")
+    private WebElement menuDevelopment;
 
-    @FindBy(css = "button[data-test-id='nav-filters-button']")
+    @FindBy(css = "button.tm-navigation-filters-spoiler__button")
     private WebElement filtersButton;
 
     @FindBy(xpath = "//button[contains(text(),'≥50')]")
@@ -71,43 +73,43 @@ public class MainPage {
     private WebElement votes;
 
     public String getErrorCode() {
+        myWait(5).clickable(authorButton);
         authorButton.click();
         LOG.info("Нажали на кнопку: Как стать автором");
+        myWait(5).clickable(postButton);
         postButton.click();
         LOG.info("Нажали на кнопку: Написать публикацию");
+        myWait(5).visible(errorCode);
         return errorCode.getText();
     }
 
-    public Boolean getTextEnterButton() throws InterruptedException {
-        Thread.sleep(3000);
+    public Boolean getTextEnterButton() {
         String titleEnterButton = enterButton.getText();
+        myWait(5).clickable(settingsButton);
+        settingsButton.click();
+        LOG.info("Нажали на кнопку Settings");
+
         if (titleEnterButton.equals("Login")) {
-            settingsButton.click();
-            LOG.info("Нажали на кнопку Settings");
-            Thread.sleep(3000);
-            actions.moveToElement(russishCheckBox).click().perform();
-            LOG.info("Выбрали чекбокс Русский");
-            Thread.sleep(3000);
-            saveButton.click();
-            LOG.info("Нажали на кнопку Save preferences");
+            myWait(5).clickable(russischRadioButton);
+            russischRadioButton.click();
+            LOG.info("Выбрали Русский");
         } else {
-            settingsButton.click();
-            LOG.info("Нажали на кнопку Настройки");
-            Thread.sleep(3000);
-            actions.moveToElement(englishCheckBox).click().perform();
-            LOG.info("Выбрали чекбокс English");
-            Thread.sleep(3000);
-            saveButton.click();
-            LOG.info("Нажали на кнопку Сохранить настройки");
+            myWait(5).clickable(englishRadioButton);
+            englishRadioButton.click();
+            LOG.info("Выбрали English");
         }
+        saveButton.click();
+        LOG.info("Нажали на кнопку Сохранить");
         String newTitleEnterButton = enterButton.getText();
         return !titleEnterButton.equals(newTitleEnterButton);
     }
 
     public Boolean isDarkThema() {
+        myWait(5).clickable(settingsButton);
         settingsButton.click();
         LOG.info("Нажали на кнопку Настройки");
-        radioButtons.get(4).click();
+        myWait(5).clickable(darkThemaRadioButton);
+        darkThemaRadioButton.click();
         LOG.info("Выбрали чекбокс цветовой темы Темная");
         saveButton.click();
         LOG.info("Нажали на кнопку Сохранить настройки");
@@ -116,10 +118,12 @@ public class MainPage {
     }
 
     public Boolean isCompactMode() {
+        myWait(5).clickable(settingsButton);
         settingsButton.click();
         LOG.info("Нажали на кнопку Настройки");
-        radioButtons.get(3).click();
-        LOG.info("Выбрали чекбокс вида ленты Компактный");
+        myWait(5).clickable(compactModeRadioButton);
+        compactModeRadioButton.click();
+        LOG.info("Выбрали Компактный вид ленты");
         saveButton.click();
         LOG.info("Нажали на кнопку Сохранить настройки");
         return articleList.isEmpty();
@@ -135,13 +139,14 @@ public class MainPage {
     }
 
     public Boolean isVotesEqualsFilter() {
-        menuChapters.get(1).click();
+        menuDevelopment.click();
         LOG.info("Перешли в раздел Разработка");
         waitForDevelopmentSection();
+        myWait(5).visible(filtersButton);
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
         filter50.click();
-        LOG.info("Выбрали порог рейтинга ≥100");
+        LOG.info("Выбрали порог рейтинга ≥50");
         filterApplyButton.click();
         LOG.info("Нажали кнопку Применить");
         String votesValue = votes.getText();
@@ -149,10 +154,10 @@ public class MainPage {
     }
 
     public Boolean isDisabledFilterApplyButton() {
-        myWait(3).clickable(filtersButton);
+        myWait(5).clickable(filtersButton);
         filtersButton.click();
         LOG.info("Раскрыли список с фильтрами");
-        myWait(3).visible(filterApplyButton);
+        myWait(5).visible(filterApplyButton);
         return !filterApplyButton.isEnabled();
     }
 

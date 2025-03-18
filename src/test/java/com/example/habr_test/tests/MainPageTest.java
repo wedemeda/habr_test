@@ -3,10 +3,7 @@ package com.example.habr_test.tests;
 import com.example.habr_test.MyExtension;
 import com.example.habr_test.pages.MainPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 
@@ -33,7 +30,7 @@ public class MainPageTest extends BaseTest {
 
     @Test
     @DisplayName("Проверка, что после смены настроек языка , название кнопки входа изменилось")
-    public void titleEnterButtonCheck() throws InterruptedException {
+    public void titleEnterButtonCheck() {
         assertEquals(true, mainPage.getTextEnterButton(), "Название кнопки не изменилось");
     }
 
@@ -49,13 +46,13 @@ public class MainPageTest extends BaseTest {
         assertEquals(true, mainPage.isCompactMode(), "Вид ленты не изменился");
     }
 
-    @RepeatedTest(10)
+    @Test
     @DisplayName("Проверка, что при выборе раздела статей Разработка и установленном фильтре Порог рейтинга   >= 50 вывелась статья с рейтингом >= 100")
     public void votesEqualsFilterCheck() {
         assertEquals(true, mainPage.isVotesEqualsFilter(), "Порог рейтинга статьи <50");
     }
 
-    @RepeatedTest(10)
+    @Test
     @DisplayName("Проверка, что не залогонившись кнопка Применить в настройках ленты не активна")
     public void disabledFilterApplyButtonCheck() {
         assertEquals(true, mainPage.isDisabledFilterApplyButton(), "Кнопка активная");

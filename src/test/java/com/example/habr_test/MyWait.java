@@ -11,7 +11,7 @@ import java.time.Duration;
 public class MyWait {
 
     AllureLogger LOG = new AllureLogger(LoggerFactory.getLogger(MyWait.class));
-    private WebDriverWait wait;
+    private final WebDriverWait wait;
     private final int secondsToWait;
 
     public static MyWait myWait(int seconds) {
@@ -23,13 +23,13 @@ public class MyWait {
         wait = new WebDriverWait(BaseTest.getDriver(), Duration.ofSeconds(seconds));
     }
 
-    public WebElement clickable(WebElement element) {
+    public void clickable(WebElement element) {
         LOG.info("Ждем " + secondsToWait + " секунд пока элемент станет кликабельным " + element.toString());
-        return wait.until(ExpectedConditions.elementToBeClickable(element));
+        wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public WebElement visible(WebElement element) {
+    public void visible(WebElement element) {
         LOG.info("Ждем " + secondsToWait + " секунд пока элемент станет видимым " + element.toString());
-        return wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 }

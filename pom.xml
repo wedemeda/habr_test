@@ -16,7 +16,7 @@
         <junit.version>5.9.3</junit.version>
         <aspectj.version>1.9.19</aspectj.version>
         <allure.version>2.24.0</allure.version>
-        <selenium.version>4.29.0</selenium.version>
+        <selenium.version>4.30.0</selenium.version>
     </properties>
     <dependencyManagement>
         <dependencies>
